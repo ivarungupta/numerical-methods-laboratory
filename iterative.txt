@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <math.h>
+
+#define MAX_ITERATIONS 100
+#define TOLERANCE 1e-6
+
+double f(double x) {
+    // Define the non-linear equation f(x) = 0 here
+    // Example: x^3 - x^2 + 2 = 0
+    return x * x * x - x * x + 2;
+}
+
+double g(double x) {
+    // Define the function g(x) for the iterative method here
+    // Example: g(x) = (x^2 + 2) / (2 * x - 1)
+    return (x * x + 2) / (2 * x - 1);
+}
+
+double iterative_method(double x0) {
+    int iteration = 1;
+    double x = x0;
+    double x_next, error;
+
+    while (iteration <= MAX_ITERATIONS) {
+        x_next = g(x);
+        error = fabs(x_next - x);
+
+        printf("Iteration %d: x = %.6f, Error = %.6f\n", iteration, x_next, error);
+
+        if (error < TOLERANCE) {
+            return x_next;
+        }
+
+        x = x_next;
+        iteration++;
+    }
+
+    printf("Maximum iterations reached. Solution did not converge.\n");
+    return 0.0;
+}
+
+int main() {
+    double x0 = 1.0; // Initial guess
+    double root = iterative_method(x0);
+
+    if (root != 0.0) {
+        printf("\nRoot of the equation f(x) = 0 is: x = %.6f\n", root);
+    }
+
+    return 0;
+}s

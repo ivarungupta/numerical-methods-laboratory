@@ -1,0 +1,33 @@
+#include<stdio.h>
+
+int main() {
+  int n;
+  printf("Enter number of values to be enterd: ");
+  scanf("%d", &n);
+
+  double x[n], f_x[n];
+  printf("Enter x and f(x)\n");
+  for (int i = 0; i < n; i++) {
+    scanf("%lf%lf", &x[i], &f_x[i]);
+  }
+
+  double x_ans;
+  printf("Enter x at which the function is to be interpolated: ");
+  scanf("%lf", &x_ans);
+
+  double sum = f_x[0], prod = 1;
+
+  int k = 1;
+  while (k < n) {
+    for (int i = 0; i < n; i++) {
+      f_x[i] = (f_x[i] - f_x[i + 1]) / (x[i] - x[i + k]);
+    }
+
+    prod *= x_ans - x[k - 1];
+    sum += prod * f_x[0];
+    k++;
+  }
+  printf("f(%.2lf) = %.3lf\n", x_ans, sum);
+
+  return 0;
+}

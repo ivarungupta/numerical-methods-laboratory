@@ -1,0 +1,34 @@
+#include <stdio.h>
+
+// Define the function y' = f(x, y)
+double f(double x, double y) {
+    return x + y; // Example function (you can replace this with any function you like)
+}
+
+// Second-order Runge-Kutta method
+double runge_kutta(double x0, double y0, double h, double xmax) {
+    double x = x0;
+    double y = y0;
+    
+    while (x < xmax) {
+        double k1 = h * f(x, y);
+        double k2 = h * f(x + h, y + k1);
+        y += 0.5 * (k1 + k2);
+        x += h;
+    }
+    
+    return y;
+}
+
+int main() {
+    double x0 = 0; // Initial value of x
+    double y0 = 1; // Initial value of y
+    double h = 0.1; // Step size
+    double xmax = 1; // Maximum value of x
+
+    double result = runge_kutta(x0, y0, h, xmax);
+    
+    printf("The value of y at x = %.2f is %.5f\n", xmax, result);
+    
+    return 0;
+}

@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<math.h>
+
+double f(double coeff[4], double x) {
+  return coeff[0]*x*x*x + coeff[1]*x*x + coeff[2]*x + coeff[3];
+}
+
+int secant_method(double coeff[4], double a, double b, double c, double eps, int iter, int max_iter) {
+  printf("n\t\ta\t\tb\t\tc\t\tf(c)\n");
+  do {
+    if(f(coeff, a) == f(coeff, b)) {
+    printf("Mathematical Error\n");
+    return -1;
+    }
+    c = (((a * f(coeff, b)) - (b * f(coeff, a)))/(f(coeff, b)-f(coeff, a)));
+    printf("%d\t\t%lf\t%lf\t%lf\t%lf\n",iter++, a, b, c, f(coeff, c));
+    a = b;
+    b = c;
+    if(iter > max_iter) {
+      printf("Not Convergent\n");
+      return -1;
+      }
+  } while(fabs(f(coeff, c)) > eps);
+
+  printf("The approximate root of the equation by secant method is %lf\n\n", c);
+}
+
+int regula_falsi_method(double coeff[4], double a, double b, double c, double eps, int iter, int max_iter) {
+  if( f(coeff, a) * f(coeff, b) > 0) {
+    printf("Incorrect Initial Guesses.\n");
+    return -1;
+  }
+  printf("n\t\ta\t\tb\t\tc\t\tf(c)\n");
+
+do {
+  c = (((a * f(coeff, b)) - (b * f(coeff, a)))/(f(coeff, b)-f(coeff, a)));
+  printf("%d\t\t%lf\t%lf\t%lf\t%lf\n", iter++, a, b, c, f(coeff, c));
+
+  if(f(coeff, a) * f(coeff, c) < 0) {
+    b = c;
+  } else {
+    a = c;
+  }
+  } while(fabs(f(coeff, c)) > eps && iter <= max_iter);
+
+  printf("The approximate root of the equation by regula falsi method is %lf\n",c);
+}
+
+int main() {
+  double a, b, c, eps, coeff[4];
+  int iter = 1, max_iter;
+
+  printf("Enter the interval: ");
+  scanf("%lf%lf", &a, &b);
+  printf("Enter coefficients of the polynomial: ");
+  scanf("%lf%lf%lf%lf", &coeff[0], &coeff[1], &coeff[2], &coeff[3]);
+  printf("Enter error tolerance: ");
+  scanf("%lf", &eps);
+  printf("Enter maximum iterations: ");
+  scanf("%d", &max_iter);
+
+  secant_method(coeff, a, b, c, eps, iter, max_iter);
+  regula_falsi_method(coeff, a, b, c, eps, iter, max_iter);
+  
+  return 0;
+}

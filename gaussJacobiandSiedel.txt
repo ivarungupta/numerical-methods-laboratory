@@ -1,0 +1,137 @@
+#include <stdio.h>
+#include <math.h>
+
+int check_error(int n, double error[n], double eps)
+{
+  for (int i = 0; i < n; i++)
+  {
+    if (fabs(error[i]) < eps)
+    {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+void gauss_jacobi(int n, double mat[n][n + 1], double sol_mat[n], double eps, int max_iter)
+{
+  int iter = 1;
+  double error[n], temp[n];
+  double sol[n];
+  for (int i = 0; i < n; i++)
+  {
+    sol[i] = sol_mat[n];
+  }
+  printf("n\t\t");
+  for (int i = 1; i < n + 1; i++)
+  {
+    printf("x%d\t\t", i);
+  }
+  printf("\n");
+  do
+  {
+    for (int i = 0; i < n; i++)
+    {
+      double sum = 0;
+      for (int j = 0; j < n; j++)
+      {
+        if (j != i)
+        {
+          sum += mat[i][j] * sol[j];
+        }
+      }
+      temp[i] = (mat[i][n] - sum) / mat[i][i];
+    }
+    for (int i = 0; i < n; i++)
+    {
+      error[i] = temp[i] - sol[i];
+
+      sol[i] = temp[i];
+    }
+    printf("%d\t\t", iter++);
+    for (int i = 0; i < n; i++)
+    {
+      printf("%lf\t", sol[i]);
+    }
+    printf("\n");
+  } while (check_error(n, error, eps) && iter <= max_iter);
+  printf("\nThe solution matrix by gauss jacobi method is: [ ");
+  for (int i = 0; i < n; i++)
+  {
+    printf("%.3lf ", sol[i]);
+  }
+  printf("]\n\n");
+}
+void gauss_seidel(int n, double mat[n][n + 1], double sol_mat[n], double eps, int max_iter)
+{
+  int iter = 1;
+  double error[n], temp[n];
+  printf("n\t\t");
+  for (int i = 1; i < n + 1; i++)
+  {
+    printf("x%d\t\t", i);
+  }
+  printf("\n");
+  do
+  {
+    for (int i = 0; i < n; i++)
+    {
+      temp[i] = sol_mat[i];
+    }
+    for (int i = 0; i < n; i++)
+    {
+      double sum = 0;
+      for (int j = 0; j < n; j++)
+      {
+        if (j != i)
+        {
+          sum += mat[i][j] * sol_mat[j];
+        }
+      }
+      sol_mat[i] = (mat[i][n] - sum) / mat[i][i];
+    }
+    printf("%d\t\t", iter++);
+    for (int i = 0; i < n; i++)
+    {
+      error[i] = temp[i] - sol_mat[i];
+      printf("%lf\t", sol_mat[i]);
+    }
+    printf("\n");
+  } while (check_error(n, error, eps) && iter <= max_iter);
+  printf("\nThe solution matrix by gauss seidel method is: [ ");
+  for (int i = 0; i < n; i++)
+  {
+    printf("%.3lf ", sol_mat[i]);
+  }
+  printf("]\n");
+}
+int main()
+{
+  int n;
+  printf("Enter dimensions of the matrix: ");
+  scanf("%d", &n);
+  double mat[n][n + 1];
+  for (int i = 0; i < n; i++)
+  {
+    for (int j = 0; j < n + 1; j++)
+    {
+      scanf("%lf", &mat[i][j]);
+    }
+  }
+  printf("\n");
+  double sol_mat[n], temp[n];
+  printf("Enter the initial guess for the solution matrix\n");
+  for (int i = 0; i < n; i++)
+  {
+    scanf("%lf", &sol_mat[i]);
+  }
+  double eps;
+  printf("Enter error tolerance: ");
+  scanf("%lf", &eps);
+  int max_iter;
+  printf("Enter max iterations: ");
+  scanf("%d", &max_iter);
+  gauss_jacobi(n, mat, sol_mat, eps, max_iter);
+  gauss_seidel(n, mat, sol_mat, eps, max_iter);
+  return 0;
+}

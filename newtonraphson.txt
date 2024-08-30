@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <math.h>
+
+double f(double a, double b, double c, double d, double x) {
+  return a*x*x*x + b*x*x + c*x + d;
+}
+
+double df(double a, double b, double c, double x) {
+  return 3*a*x*x + 2*b*x + c;
+}
+
+int main(void) {
+  double error = 0, eps, x0, x1;
+  int i = 0, n;
+  printf("Enter the initial guess: ");
+  scanf("%lf",&x0);
+
+  double p, y, q, r;
+  printf("Enter coefficients of the equation: ");
+  scanf("%lf%lf%lf%lf", &p, &y, &q, &r);
+
+  printf("Enter error tolerance: ");
+  scanf("%lf", &eps);
+
+  printf("Enter max iterations: ");
+  scanf("%d", &n);
+
+  printf("n\tx0\t\tx1\t\terror\n");
+  do{
+    x1 = x0 - f(p,y,q,r,x0)/df(p,y,q,x0);
+    printf("%d\t%lf\t%lf\t", i++, x0, x1);
+    error=fabs(x1 - x0);
+    x0 = x1;
+
+    if (i == 1) {
+      printf("----\n");
+    } else
+      printf("%lf\n", error);
+    
+  } while(error>eps && i <= n);
+
+  printf("Approximate Root is %lf\n",x1);
+  return 0;
+}

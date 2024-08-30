@@ -1,0 +1,67 @@
+#include <stdio.h>
+
+int main() {
+  int n;
+  printf("Enter dimensions of the matrix: ");
+  scanf("%d", &n);
+
+  double mat[n][2 * n + 1];
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n + 1; j++) {
+      scanf("%lf", &mat[i][j]);
+    }
+  }
+
+  printf("\n");
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (i == j) {
+	mat[i][j + n + 1] = 1;
+      } else {
+	mat[i][j + n + 1] = 0;
+      }
+    }
+  }
+
+  for (int k = 0; k < n; k++) {
+    for (int i = k + 1; i < n; i++) {
+      double mult = mat[i][k] / mat[k][k];
+      for (int j = k; j < 2 * n + 1; j++) {
+        mat[i][j] -= mult * mat[k][j];
+      }
+    }
+  }
+
+  for (int k = n - 1; k > 0; k--) {
+    for (int i = k - 1; i >= 0; i--) {
+      double mult = mat[i][k] / mat[k][k];
+      for (int j = 0; j < 2 * n + 1; j++) {
+	mat[i][j] -= mult * mat[k][j];
+      }
+    }
+  }
+
+  for (int i = 0; i < n; i++) {
+    double diag = mat[i][i];
+    for (int j = 0; j < 2 * n + 1; j++) {
+      mat[i][j] /= diag;
+    }
+  }
+
+  printf("The solution of the the system of the equations are:\n");
+  for (int i = 0; i < n; i++) {
+    printf("x%d = %.3lf\n", i + 1, mat[i][n]);
+  }
+
+  printf("\n");
+  printf("The inverse of the matrix is:\n");
+  for (int i = 0; i < n; i++) {
+    for (int j = n + 1; j < 2 * n + 1; j++) {
+      printf("%.3lf\t", mat[i][j]);
+    }
+    printf("\n");
+  }
+
+  return 0;
+}

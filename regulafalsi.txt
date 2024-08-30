@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <math.h>
+
+double f(double a, double b, double c, double x) {
+  return x - exp(-x);
+}
+
+int main(void) {
+  double a = 0, b = 0, error = 0, eps, x0, x1;
+  int i = 0, n;
+  printf("Enter the end points of the interval: ");
+  scanf("%lf%lf",&a,&b);
+
+  double p, y, q;
+  printf("Enter coefficients of the equation: ");
+  scanf("%lf%lf%lf", &p, &y, &q);
+
+  printf("Enter error tolerance: ");
+  scanf("%lf", &eps);
+
+  printf("Enter max iterations: ");
+  scanf("%d", &n);
+
+  if ((f(p, y, q, a) * f(p, y, q, b)) > 0){
+    printf("Invalid Interval Exit!");
+    return 1;
+  }
+
+  printf(" n\ta\t\tb\t\tx1\t\tf(x1)\t\terror\n");
+  do{
+    x0 = x1;
+    x1 = (((a * f(p, y, q, b)) - (b * f(p, y, q, a)))/(f(p, y, q, b)-f(p, y, q, a)));
+
+    printf("%d\t%lf\t%lf\t%lf\t%lf\t", i++, a, b, x1, f(p ,y, q, x1));
+
+    if(f(p, y, q, x1) == 0) {
+      printf("Root is %lf\n",x1);
+      return 0;
+    } else if ((f(p, y, q, a)*f(p, y, q, x1))<0) {
+      b = x1;
+    } else
+      a = x1;
+
+    error=fabs(x1 - x0);
+
+    if (i == 1) {
+      printf("----\n");
+    } else
+      printf("%lf\n", error);
+
+  } while(error>eps && i <= n);
+
+  printf("Approximate Root is %lf\n",x1);
+  return 0;
+}

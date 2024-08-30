@@ -1,0 +1,52 @@
+#include <stdio.h>
+
+int main() {
+  int n;
+  printf("Enter dimensions of the matrix: ");
+  scanf("%d", &n);
+
+  double mat[n][n + 1];
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n + 1; j++) {
+      scanf("%lf", &mat[i][j]);
+    }
+  }
+  printf("\n");
+
+  for (int i = n - 1; i > 0; i--) {
+    if (mat[i - 1][0] < mat[i][0]) {
+      for (int j = 0; j <= n; j++) {
+	double temp = mat[i][j];
+	mat[i][j] = mat[i - 1][j];
+	mat[i - 1][j] = temp;
+      }
+    }
+  }
+
+  for (int k = 0; k < n; k++) {
+        for (int i = k + 1; i < n; i++) {
+            double mult = mat[i][k] / mat[k][k];
+            for (int j = k; j < n + 1; j++) {
+                mat[i][j] -= mult * mat[k][j];
+            }
+        }
+  }
+
+  double sol[n];
+  for(int i=n-1;i>=0;i--) {
+    double sum = 0;
+
+    for(int j=i;j<=n-1;j++) {
+      sum += mat[i][j] * sol[j];
+    }
+
+    sol[i]=(mat[i][n] - sum) / mat[i][i];
+  }
+
+  printf("The solution of the the system of the equations are:\n");
+  for (int i = 0; i < n; i++) {
+    printf("x%d = %.3lf\n", i + 1, sol[i]);
+  }
+
+  return 0;
+}

@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main() {
+  int n;
+  printf("Enter dimensions of the matrix: ");
+  scanf("%d", &n);
+
+  double mat[n][n + 1];
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n + 1; j++) {
+      scanf("%lf", &mat[i][j]);
+    }
+  }
+
+  printf("\n");
+
+  double sol_mat[n];
+  printf("Enter the initial guess for the solution matrix\n");
+  for (int i = 0; i < n; i++) {
+    scanf("%lf", &sol_mat[i]);
+  }
+
+  double eps;
+  printf("Enter error tolerance: ");
+  scanf("%lf", &eps);
+
+  int max_iter;
+  printf("Enter max iterations: ");
+  scanf("%d", &max_iter);
+
+  double temp[n], error;
+  int iter = 1;
+
+  printf("iter\t");
+  for (int i = 0; i < n; i++) {
+    printf("a%d\t\t", i);
+  }
+  printf("\n");
+  do {
+    for (int i = 0; i < n; i++) {
+      temp[i] = mat[i][n] / mat[i][i];
+      for (int j = 0; j < n; j++) {
+	if (j != i) {
+	  temp[i] -= mat[i][j] / mat[i][i] * sol_mat[j];
+	}
+      }
+    }
+
+    error = fabs(temp[0] - sol_mat[0]) / sol_mat[0];
+    for (int i = 0; i < n; i++) {
+      sol_mat[i] = temp[i];
+    }
+
+    printf("%d.\t", iter);
+    for (int i = 0; i < n; i++) {
+      printf("%lf\t", sol_mat[i]);
+    }
+    printf("\n");
+
+  } while (error > eps && iter++ <= max_iter);
+
+  printf("\nThe solution matrix is: [ ");
+  for (int i = 0; i < n; i++) {
+    printf("%.3lf ", sol_mat[i]);
+  }
+  printf("]\n");
+  return 0;
+}s
