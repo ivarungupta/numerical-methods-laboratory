@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include<bits/stdc++.h>
 
 double f(double a, double b, double c, double x) {
   return a*x*x + b*x + c;
